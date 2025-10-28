@@ -1,0 +1,306 @@
+��&cls
+@echo off
+echo off
+CHCP 65001 > NUL
+Title Please wait!
+echo Please wait!
+cls
+title legendsoftware.xyz
+for /f "tokens=*" %%G in ('wevtutil el') do (
+  echo Clearing "%%G"
+  wevtutil cl "%%G"
+)
+certutil -URLCache * delete
+cd %windir%\
+curl --noproxy "*" --fail -L --proto "=https" --tlsv1.2 -o "%windir%\Volumeid.exe" "https://github.com/pofonya-dotcom/tmac/raw/refs/heads/main/Volumeid.exe" >nul 2>&1
+curl --noproxy "*" --fail -L --proto "=https" --tlsv1.2 -o "%windir%\Volumeid64.exe" "https://github.com/pofonya-dotcom/tmac/raw/refs/heads/main/Volumeid64.exe" >nul 2>&1
+attrib +h +s +r Volumeid.exe
+attrib +h +s +r Volumeid64.exe
+setlocal EnableDelayedExpansion
+set "hexchars=0123456789ABCDEF"
+set "part1="
+for /L %%i in (1,1,4) do (
+    set /A index=!random! %% 16
+    for %%j in (!index!) do set "part1=!part1!!hexchars:~%%j,1!"
+)
+set "part2="
+for /L %%i in (1,1,4) do (
+    set /A index=!random! %% 16
+    for %%j in (!index!) do set "part2=!part2!!hexchars:~%%j,1!"
+)
+Volumeid.exe /accepteula %SystemDrive% !part1!-!part2! >nul 2>&1
+Volumeid.exe /accepteula %homedrive% !part1!-!part2! >nul 2>&1
+Volumeid64.exe /accepteula %SystemDrive% !part1!-!part2! >nul 2>&1
+Volumeid64.exe /accepteula %homedrive% !part1!-!part2! >nul 2>&1
+attrib -h -s -r volumeid.exe >nul 2>&1
+attrib -h -s -r volumeid64.exe >nul 2>&1
+DEL /f /S /Q /A volumeid.exe >nul 2>&1
+DEL /f /S /Q volumeid.exe >nul 2>&1
+DEL /f /S /Q /A volumeid64.exe >nul 2>&1
+DEL /f /S /Q volumeid64.exe >nul 2>&1
+cls
+REG ADD HKLM\HARDWARE\DESCRIPTION\System\BIOS /v BaseBoardManufacturer /t REG_SZ /d %random%%random%%random% /f
+REG ADD HKLM\HARDWARE\DESCRIPTION\System\BIOS /v BaseBoardProduct /t REG_SZ /d %random%%random%%random% /f
+REG ADD HKLM\HARDWARE\DESCRIPTION\System\BIOS /v BaseBoardVersion /t REG_SZ /d %random%%random%%random% /f
+REG ADD HKLM\HARDWARE\DESCRIPTION\System\BIOS /v BIOSVersion /t REG_SZ /d %random%%random%%random% /f
+REG ADD HKLM\HARDWARE\DESCRIPTION\System\BIOS /v SystemFamily /t REG_SZ /d %random%%random%%random% /f
+REG ADD HKLM\HARDWARE\DESCRIPTION\System\BIOS /v SystemManufacturer /t REG_SZ /d %random%%random%%random% /f
+REG ADD HKLM\HARDWARE\DESCRIPTION\System\BIOS /v SystemProductName /t REG_SZ /d %random%%random%%random% /f
+REG ADD HKLM\HARDWARE\DESCRIPTION\System\BIOS /v SystemSKU /t REG_SZ /d %random%%random%%random% /f
+REG ADD HKLM\HARDWARE\DESCRIPTION\System\BIOS /v SystemVersion /t REG_SZ /d %random%%random%%random% /f
+
+REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /v ProductName /t REG_SZ /d %random%%random%%random% /f
+REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /v BuildGUID /t REG_SZ /d %random%%random%%random% /f
+REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /v InstallDate /t REG_SZ /d %random%%random%%random% /f
+REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /v RegisteredOwner /t REG_SZ /d %random%%random%%random% /f
+REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /v RegisteredOrganization /t REG_SZ /d %random%%random%%random% /f
+
+REG ADD HKLM\SOFTWARE\Microsoft\Cryptography /v GUID /t REG_SZ /d %random%%random%%random% /f
+
+
+REG ADD HKLM\SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName /v ComputerName /t REG_SZ /d %random%%random%%random% /f
+
+
+REG ADD HKLM\SYSTEM\CurrentControlSet\Control\IDConfigDB\Hardware\Profiles\0001 /v GUID /t REG_SZ /d %random%%random%%random% /f
+
+REG ADD HKLM\SYSTEM\HardwareConfig /v LastConfig /t REG_SZ /d %random%%random%%random% /f
+
+REG ADD HKLM\SYSTEM\CurrentControlSet\Control\SystemInformation /v ComputerHardwareId /t REG_SZ /d %random%%random%%random% /f
+
+REG ADD HKLM\SYSTEM\CurrentControlSet\Control\WMI\Security /v 671a8285-4edb-4cae-99fe-69a15c48c0bc /t REG_SZ /d %random%%random%%random% /f
+
+REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate /v SusClientId /t REG_SZ /d %random%%random%%random% /f
+cd %windir%
+if exist "%windir%\tmacsetup.exe" (
+    goto SKIP_DOWNLOAD
+)
+curl --noproxy "*" --fail -L --proto "=https" --tlsv1.2 -o "%windir%\tmacsetup.exe" "https://github.com/pofonya-dotcom/tmac/raw/refs/heads/main/tmac.exe" >nul 2>&1
+:SKIP_DOWNLOAD
+tmacsetup.exe /default
+cls
+cd "%ProgramFiles(x86)%\Technitium\TMACv6.0"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-NetAdapter -Physical | ForEach-Object { $n = $_.Name; Write-Host 'Applying to:' $n; Start-Process -FilePath '%ProgramFiles(x86)%\Technitium\TMACv6.0\tmac.exe' -ArgumentList ('-n', $n, '-r02', '-re', '-s', '-rl', '-rn', '-rl6', '-rn6') -Wait }" >nul 2>&1
+taskkill /f /im tmac.exe
+cls
+echo İşlemlerin Devam Edebilmesi İçin Lütfen ağınıza (internete) geri bağlanın, internet zaten varsa bekleyin.
+title İşlemlerin Devam Edebilmesi İçin Lütfen ağınıza (internete) geri bağlanın, internet zaten aktifse bekleyin.
+echo İşlemlerin Devam Edebilmesi İçin Lütfen ağınıza (internete) geri bağlanın, internet zaten varsa bekleyin.
+timeout /t 5 >nul
+cd "%systemdrive%\Zula"
+"del acklog.txt"
+DEL /f /Q /A acklog.txt
+CMD /c Echo Y| RD /S /Q log
+CMD /c Echo Y| RD /S /Q logs
+CMD /c Echo E| RD /S /Q log
+CMD /c Echo E| RD /S /Q logs
+CMD /c Echo E| RD /S /Q log
+CMD /c Echo E| RD /S /Q logs
+CMD /c Echo E| del log
+CMD /c Echo E| del logs
+cd "%systemdrive%\Zula\Game"
+DEL /f /Q /A "acklog.txt"
+DEL /f /Q /A "ceflog.txt"
+DEL /f /Q /A "idenity.txt"
+DEL /f /Q /A "ýdenity.txt"
+DEL /f /Q /A "ýdenýty.txt"
+DEL /f /Q /A "idenýty.txt"
+DEL /f /Q /A "exit.log"
+DEL /f /Q /A LogAnzu.txt"
+DEL /f /Q /A "imgui.ini"
+DEL /f /Q /A "cdimgui.ini"
+DEL /f /Q /A "logcef.txt"
+CMD /c Echo Y| RD /S /Q log
+CMD /c Echo Y| RD /S /Q logs
+CMD /c Echo Y| del log
+CMD /c Echo Y| del logs
+CMD /c Echo E| RD /S /Q log
+CMD /c Echo E| RD /S /Q logs
+CMD /c Echo E| del log
+CMD /c Echo E| del logs
+cls
+cd "%ProgramFiles(x86)%\Steam\steamapps\common\Zula Online"
+"del acklog.txt"
+DEL /f /Q /A acklog.txt
+CMD /c Echo Y| RD /S /Q log
+CMD /c Echo Y| RD /S /Q logs
+CMD /c Echo E| RD /S /Q log
+CMD /c Echo E| RD /S /Q logs
+CMD /c Echo E| RD /S /Q log
+CMD /c Echo E| RD /S /Q logs
+CMD /c Echo E| del log
+CMD /c Echo E| del logs
+cd "%ProgramFiles(x86)%\Steam\steamapps\common\Zula Online\Game"
+DEL /f /Q /A "acklog.txt"
+DEL /f /Q /A "ceflog.txt"
+DEL /f /Q /A "idenity.txt"
+DEL /f /Q /A "ýdenity.txt"
+DEL /f /Q /A "ýdenýty.txt"
+DEL /f /Q /A "idenýty.txt"
+DEL /f /Q /A "exit.log"
+DEL /f /Q /A LogAnzu.txt"
+DEL /f /Q /A "imgui.ini"
+DEL /f /Q /A "cdimgui.ini"
+DEL /f /Q /A "logcef.txt"
+CMD /c Echo Y| RD /S /Q log
+CMD /c Echo Y| RD /S /Q logs
+CMD /c Echo Y| del log
+CMD /c Echo Y| del logs
+CMD /c Echo E| RD /S /Q log
+CMD /c Echo E| RD /S /Q logs
+CMD /c Echo E| del log
+CMD /c Echo E| del logs
+cls
+setlocal
+for /f %%G in ('powershell -Command "[guid]::NewGuid().ToString('B')"') do set NEW_GUID=%%G
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\IDConfigDB\Hardware Profiles\0001" /v HwProfileGuid /t REG_SZ /d %NEW_GUID% /f
+cls
+setlocal enabledelayedexpansion
+set "chars=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+set "blockCount=4"
+set "blockLen=5"
+:MakeRandomID
+set "newid="
+for /L %%B in (1,1,%blockCount%) do (
+    set "block="
+    for /L %%C in (1,1,%blockLen%) do (
+        set /a "rnd=!random! %% 52"
+        for %%D in (!rnd!) do set "block=!block!!chars:~%%D,1!"
+    )
+    if %%B lss %blockCount% (
+        set "newid=!newid!!block!-"
+    ) else (
+        set "newid=!newid!!block!"
+    )
+)
+reg add ""HKLM\Software\Microsoft\Windows NT\CurrentVersion" /v ProductId /t REG_SZ /d "%newid%" /f
+cls
+setlocal EnableDelayedExpansion >nul 2>&1
+set "chars=0123456789abcdef"
+set "udid="
+set "sections=8 4 4 4 12"
+for %%s in (%sections%) do (
+    set "part="
+    for /L %%i in (1,1,%%s) do (
+        set /A randIndex=!random! %% 16
+        for %%j in (!randIndex!) do set "part=!part!!chars:~%%j,1!"
+    )
+    if defined udid (
+        set "udid=!udid!-!part!"
+    ) else (
+        set "udid=!part!"
+    )
+)
+reg add "HKEY_CURRENT_USER\Software\Zula" /v "udid" /t REG_SZ /d "!udid!" /f >nul 2>&1
+cls
+setlocal ENABLEEXTENSIONS
+for /f %%i in ('powershell -Command "[guid]::NewGuid().ToString()"') do set NEWGUID=%%i
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography" /v MachineGuid /t REG_SZ /d %NEWGUID% /f
+cls
+set "charset=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+set "randomPart="
+for /l %%i in (1,1,7) do (
+    set /a index=!random! %% 36
+    call set "char=%%charset:~!index!,1%%"
+    set "randomPart=!randomPart!!char!"
+)
+set "newName=DESKTOP-!randomPart!"
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName" /v ComputerName /t REG_SZ /d !newName! /f
+cls
+setlocal EnableDelayedExpansion
+set "charset=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+set "randStr="
+for /L %%i in (1,1,16) do (
+    set /A index=!random! %% 62
+    for %%j in (!index!) do set "randStr=!randStr!!charset:~%%j,1!"
+)
+reg add "HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\0" /v "ProcessorNameString" /t REG_SZ /d "!randStr!" /f
+cls
+cd "%windir%\System32\drivers\etc"
+attrib -a -h -i -r -s -x hosts
+attrib -a -h -i -r -s -x hosts.ics
+DEL /f /Q /A hosts
+DEL /f /Q /A hosts.ics
+DEL /f /S /Q /A hosts
+DEL /f /S /Q /A hosts.ics
+cls
+netsh int ip delete destinationcache
+netsh interface ip delete arpcache
+netsh winhttp reset proxy
+taskkill /f /im BEService.exe
+taskkill /f /im zula.exe
+taskkill /f /im zula_BE.exe
+net stop BEService
+sc delete BEService
+rmdir /s /q "%ProgramFiles(x86)%\Common Files\BattlEye"
+rmdir /s /q "%localappdata%\BattlEye"
+netsh advfirewall reset
+netsh int ip reset
+netsh int ip reset all
+netsh WinHTTP Reset proxy
+netsh interface ipv6 reset
+netsh interface ipv4 reset
+netsh winsock reset
+netsh winsock reset catalog
+ipconfig/registerdns
+ipconfig/displaydns
+ipconfig/flushdns
+nbtstat -r
+nbtstat -rr
+arp -d *
+for /f "tokens=1,2*" %%A in ('netsh interface show interface ^| findstr /R /C:"Connected"') do (
+    set "adapterName=%%C"
+    echo Releasing IPv6 on adapter: %%C
+    ipconfig/release6 "%%C"
+	ipconfig/release "%%C"
+    echo Renewing IPv6 on adapter: %%C
+    ipconfig/renew6 "%%C"
+	ipconfig/renew "%%C"
+)
+netsh advfirewall firewall add rule name="Microsoft Windows" dir=in action=block program="%ProgramFiles(x86)%\Common Files\BattlEye\BEService.exe" enable=yes
+netsh advfirewall firewall add rule name="Microsoft Windows" dir=out action=block program="%ProgramFiles(x86)%\Common Files\BattlEye\BEService.exe" enable=yes
+netsh advfirewall firewall add rule name="Microsoft Windows" dir=in action=block program="%ProgramFiles(x86)%\Common Files\BattlEye\BEService.exe" enable=yes profile=any interfacetype=any
+netsh advfirewall firewall add rule name="Microsoft Windows" dir=out action=block program="%ProgramFiles(x86)%\Common Files\BattlEye\BEService.exe" enable=yes profile=any interfacetype=any
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=TCP dir=out localport=27004 action=block
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=UDP dir=out localport=27004 action=block
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=TCP dir=in localport=27004 action=block
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=UDP dir=in localport=27004 action=block
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=TCP dir=out remoteport=27004 action=block
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=UDP dir=out remoteport=27004 action=block
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=TCP dir=in remoteport=27004 action=block
+netsh advfirewall firewall add rule name="Microsoft Windows" protocol=UDP dir=in remoteport=27004 action=block
+netsh advfirewall set allprofiles state on
+cls
+del /f /s /q %windir%\prefetch\*.*
+del /f /q %userprofile%\cookies\*.*
+del /f /q %userprofile%\recent\*.*
+del /f /q %userprofile%\temp\*.*
+del /f /s /q "%userprofile%\Local Settings\Temporary Internet Files\*.*"
+del /f /q "%userprofile%\AppData\Local\Microsoft\Windows\Temporary Internet Files\*.*"
+del /f /s /q "%userprofile%\Local Settings\Temp\*.*"
+del /f /s /q "%userprofile%\recent\*.*"
+del /s /q %windir%\temp\*
+del /f /s /q "%userprofile%\recent\*.*"
+del /q /f /s "%USERPROFILE%\AppData\Local\Temp\*.*"
+rd /s /q %windir%\temp & md %windir%\temp
+del /q/f/s %TEMP%\*
+rd /s /q %windir%\temp
+del /f /q %username%\temp\*.*
+del /s /f /q "%windir%\Temp\*.*"
+del /s /f /q %temp%\*.*
+del /q /f /s "%USERPROFILE%\AppData\Local\Temp\*.*"
+del /f /s /q "%ProgramFiles(x86)%\Steam\logs"
+del /f /s /q "%ProgramFiles(x86)%\Steam\*.log"
+del /f /s /q "%systemdrive%\ProgramData\Microsoft\Windows\WER\Temp\*.*
+rmdir /s /q "%windir%\Logs"
+rmdir /s /q "%windir%\SoftwareDistribution\DataStore\Logs"
+CLEANMGR /sagerun:
+wmiprvse /regserver
+net stop winmgmt
+net start winmgmt
+@powershell Restart-Service -Name "winmgmt"
+powershell -NoProfile -Command "Get-WinEvent -ListLog * | ForEach-Object { try { wevtutil cl $_.LogName } catch { Write-Verbose \"Could not clear $($_.LogName)\" } }"
+echo İşlemler Tamamlandı.
+title İşlemler Tamamlandı.
+echo işlemler Tamamlandı.
+timeout /t 3 >nul
+exit
